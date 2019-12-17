@@ -31,6 +31,9 @@ int initSquare(vector<int>& in, int m , int n ){
 //数一数有从2 ~max 分别有多少个
 int countSquare(vector<int>& in, int m , int n ){
 	vector<int> squareCnt(max(m,n));
+	//这里如果不改原数据
+	//使用一个临时存储，由于只使用到i-1  i 两行
+	//因为也可以优化占用空间为O(m)
 	for( int i = 1 ; i < m ; i++){
 		for( int j = 1 ; j < n ; j++){
 			if( in[ i*m + j ] != 0 ){
