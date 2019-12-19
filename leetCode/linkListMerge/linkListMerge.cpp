@@ -15,8 +15,39 @@ class ListNode {
       ListNode() {  next = nullptr; }
 };
 
+//两个有序的合并 
 ListNode* listMerge(ListNode* p1, ListNode* p2){
-    return nullptr;
+	if( p1 == nullptr){
+		return p2;
+	}
+	if( p2 == nullptr){
+		return p1;
+	}
+	if( p1 == p2 ){
+		return p1;
+	}
+	ListNode dummy;
+	ListNode* head = &dummy;
+	ListNode* result = &dummy;
+	while( p1 != nullptr && p2 != nullptr){
+		if( p1->val <= p2->val ){
+			head->next = p1;
+			p1 = p1->next;
+			head = head->next;
+		}
+		else{
+			head->next = p2;
+			p2 = p2->next;
+			head = head->next;
+		}
+	}
+	if( p1 != nullptr){
+		head->next = p1;
+	}
+	if( p2 != nullptr){
+		head->next = p2;
+	}
+    return result->next;
 }
 
 
@@ -60,14 +91,12 @@ void outputListNode(ListNode* p){
     cout << endl;
 }
 
-vector<int> makeRandVec( int num, int mod=100){
-    vector<int> out(num);
+void makeRandVec(vector<int>& out, int num, int mod=100){
+	out.reserve(num);
     for( int i = 0 ; i < num ; i++){
-        out[i] = rand()%100;
+		out.push_back(rand()%mod);
     }
-    cout << __func__ << endl;
-    outputVec(out);
-    return out;
+	return ;
 }
 
 ListNode*  makeList(const vector<int>& in){
@@ -75,7 +104,14 @@ ListNode*  makeList(const vector<int>& in){
     ListNode* pre = pHead;
     for( auto i : in )
     {
+		if( i > 100 || i < 0 ){
+			cout << " what the fuck ? " << i << endl; 
+		}
         ListNode* p = new ListNode(i);
+		if( p == nullptr){
+			cout << " what the fuck nullptr? " << i << endl; 
+			exit(0);
+		}
         if(pre == nullptr) {
             pHead = p;
         }
@@ -92,16 +128,42 @@ int main(int argc, char**argv){
     vector<int>  r2Sort;
     srand(Nowms());
     int num1 = 10;
-    int num2 = 20;
+    int num2 = 10;
     if( argc > 2 ){
         num1 = atoi(argv[1]);
         num2 = atoi(argv[2]);
     }
-    vector<int> link1 = std::move(makeRandVec(num1));
-    vector<int> link2 = std::move(makeRandVec(num2));
+    vector<int> link1 ; 
+	// link1.resize(num1);
+	//	cout << hex << (void*)(link1.data()) << " " << link1.size() <<  endl;
+	//makeRandVec(link1,num1);
+	int mod = 100;
+	link1.reserve(num1);
+    for( int i = 0 ; i < num1 ; i++){
+		link1.push_back(rand()%mod);
+    }
+	cout << "link1:" << link1.size() << endl;
+	//	cout << hex << (void*)(link1.data()) << " " << link1.size() <<  endl;
+	vector<int> link2 ;  
+	//	link2.resize(num2);
+	//	cout << hex << (void*)(link2.data()) << " " << link2.size() <<  endl;
+	makeRandVec(link2,num2);
+	/*
+	   link2.reserve(num2);
+	   for( int i = 0 ; i < num2 ; i++){
+	   link2.push_back(rand()%mod);
+	   }
+	   */
+	cout << "link2:" << link2.size() << endl;
+
+	std::sort(link1.begin(), link1.end());
+	std::sort(link2.begin(), link2.end());
+
     ListNode* p1 = makeList(link1);
     ListNode* p2 = makeList(link2);
-    outputListNode(p1);
-    outputListNode(p2);
+    cout << "p1\n " ;  outputListNode(p1);
+    cout << "p2\n "; outputListNode(p2);
+	//ListNode* p3 = listMerge(p1,p2);
+	//outputListNode(p3);
     return 0;
 }
