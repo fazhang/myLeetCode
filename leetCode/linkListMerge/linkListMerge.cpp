@@ -91,36 +91,25 @@ void outputListNode(ListNode* p){
     cout << endl;
 }
 
-void makeRandVec(vector<int>& out, int num, int mod=100){
-	out.reserve(num);
+vector<int> makeRandVec( int num, int mod=100){
+    vector<int> out;
+    out.reserve(num);
     for( int i = 0 ; i < num ; i++){
 		out.push_back(rand()%mod);
     }
-	return ;
+	return out;
 }
 
 ListNode*  makeList(const vector<int>& in){
-    ListNode* pHead ;
-    ListNode* pre = pHead;
+    ListNode pHead ;
+    ListNode* pre = &pHead;
     for( auto i : in )
     {
-		if( i > 100 || i < 0 ){
-			cout << " what the fuck ? " << i << endl; 
-		}
         ListNode* p = new ListNode(i);
-		if( p == nullptr){
-			cout << " what the fuck nullptr? " << i << endl; 
-			exit(0);
-		}
-        if(pre == nullptr) {
-            pHead = p;
-        }
-        else{
-            pre->next = p ;
-        }
+        pre->next = p ;
         pre = p ;
     }
-    return pHead->next;
+    return pHead.next;
 }
 
 
@@ -133,28 +122,10 @@ int main(int argc, char**argv){
         num1 = atoi(argv[1]);
         num2 = atoi(argv[2]);
     }
-    vector<int> link1 ; 
-	// link1.resize(num1);
-	//	cout << hex << (void*)(link1.data()) << " " << link1.size() <<  endl;
-	//makeRandVec(link1,num1);
-	int mod = 100;
-	link1.reserve(num1);
-    for( int i = 0 ; i < num1 ; i++){
-		link1.push_back(rand()%mod);
-    }
-	cout << "link1:" << link1.size() << endl;
-	//	cout << hex << (void*)(link1.data()) << " " << link1.size() <<  endl;
-	vector<int> link2 ;  
-	//	link2.resize(num2);
-	//	cout << hex << (void*)(link2.data()) << " " << link2.size() <<  endl;
-	makeRandVec(link2,num2);
-	/*
-	   link2.reserve(num2);
-	   for( int i = 0 ; i < num2 ; i++){
-	   link2.push_back(rand()%mod);
-	   }
-	   */
-	cout << "link2:" << link2.size() << endl;
+    vector<int> link1  = (makeRandVec(num1));
+
+    vector<int> link2  = (makeRandVec(num2));
+
 
 	std::sort(link1.begin(), link1.end());
 	std::sort(link2.begin(), link2.end());
@@ -163,7 +134,7 @@ int main(int argc, char**argv){
     ListNode* p2 = makeList(link2);
     cout << "p1\n " ;  outputListNode(p1);
     cout << "p2\n "; outputListNode(p2);
-	//ListNode* p3 = listMerge(p1,p2);
-	//outputListNode(p3);
+	ListNode* p3 = listMerge(p1,p2);
+	outputListNode(p3);
     return 0;
 }
