@@ -112,10 +112,15 @@ ListNode* mergeList(ListNode* p1, ListNode* p2){
 		p1->next = p2;
 		p2->next = p1Next;
 
+		if( p1Next == nullptr && p2Next != nullptr){
+			p2->next = p2Next ; 
+			break;
+		}
+
 		p1 = p1Next;
 		p2 = p2Next;
 
-		if( p1 != nullptr) {
+		if( p1 != nullptr){
 			p1Next = p1->next;
 		}
 		if( p2 != nullptr){
@@ -177,7 +182,10 @@ int main(int argc, char**argv){
 	outputVec(tmp);
 	ListNode* p = makeList(tmp);
 	outputListNode(p);
+
+//	ListNode* p2 = makeList( makeRandVec(5 ) );
+//	outputListNode(p2);
+//	outputListNode(mergeList(p, p2));
 	ringRList(p);
-//	reverseList(p);
     return 0;
 }
