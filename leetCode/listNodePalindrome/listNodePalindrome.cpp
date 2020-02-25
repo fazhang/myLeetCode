@@ -45,7 +45,7 @@ public:
 
 int main(int argc, char**argv){
 
-		vector<int>    s = {4,5,6,7,8,8,7,6,5,4};
+		vector<int>    s = {4,5,6,7,8,7,6,5,4};
 		ListNode* pHead ;
 		ListNode* pre = pHead;
 		for( auto i : s )
