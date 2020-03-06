@@ -91,8 +91,8 @@ ListNode* reverseList(ListNode* p ){
 		pLast = p;
 		p = pNext;
 	}
-	cout << __func__ << endl;
-	outputListNode(pLast);
+	//cout << __func__ << endl;
+	//outputListNode(pLast);
 	return pLast;
 }
 
@@ -160,18 +160,33 @@ ListNode*  ringRList(ListNode* p){
 	ListNode* pHalf = reverseList(pSlow->next);
 	pSlow->next = nullptr;
 
-	outputListNode(p);
-	outputListNode(pHalf);
+	//outputListNode(p);
+	//outputListNode(pHalf);
 
 	p = mergeList(p, pHalf);
-	cout << "mergeList " <<endl;
-	outputListNode(p);
+	//cout << "mergeList " <<endl;
+	//outputListNode(p);
 
 	return p;
 }
 
+int Add(int num1, int num2) {
+	while (num2 != 0) {
+		int temp = num1 ^ num2;
+		num2 = (num1 & num2) << 1;
+		num1 = temp;
+	}
+	return num1;
+}
 
 int main(int argc, char**argv){
+	double f1 = 2.0;
+	double f2 =1.1 ; 
+	cout << f1+f2 << endl;
+	fprintf(stderr, "2.0 - 1.1 %10.20lf\n", (double)(f1-f2));
+	fprintf(stderr, "0.1 + 0.2 %10.20lf\n", (double)(0.1+0.2));
+	return 0;
+	cout << Add(1,-10) << endl;
     vector<int>  r2Sort;
     srand(Nowms());
     int num = 10;
@@ -179,13 +194,14 @@ int main(int argc, char**argv){
         num = atoi(argv[1]);
     }
 	vector<int>  tmp = makeRandVec(num);
-	outputVec(tmp);
+	//outputVec(tmp);
 	ListNode* p = makeList(tmp);
-	outputListNode(p);
+	//outputListNode(p);
 
 //	ListNode* p2 = makeList( makeRandVec(5 ) );
 //	outputListNode(p2);
 //	outputListNode(mergeList(p, p2));
-	ringRList(p);
+	outputListNode(p);
+	outputListNode(ringRList(p));
     return 0;
 }

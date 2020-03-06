@@ -16,7 +16,45 @@ class ListNode {
 };
 
 //两个有序的合并 
-ListNode* listMerge(ListNode* p1, ListNode* p2){
+ListNode* listMerge(ListNode* l1, ListNode* l2){
+	if( l1 == nullptr){
+		return l2;
+	}
+	if( l2 == nullptr){
+		return l1;
+	}
+
+	ListNode d(0);
+
+	d.next = l1;// 指向l1
+
+	ListNode* last = &d;
+
+	while (l1 != nullptr && l2 != nullptr){
+		if( l1->val <= l2->val){
+			last = l1;
+			l1 = l1->next;
+		}else{
+			// ListNode* l1next = l1->next;
+			ListNode* l2next = l2->next;
+
+			last->next = l2;
+			l2->next = l1;
+			last = l2;
+			// l1->next = l2next;
+			l2 = l2next;
+		}
+	}
+	if( l1 == nullptr){
+		last->next = l2;
+	}
+	if( l2 == nullptr){
+		last->next = l1;
+	}
+
+	return d.next;
+}
+ListNode* listMerge2(ListNode* p1, ListNode* p2){
 	if( p1 == nullptr){
 		return p2;
 	}
