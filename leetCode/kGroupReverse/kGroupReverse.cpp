@@ -95,7 +95,7 @@ ListNode* kReverse(ListNode* p ,int k){
 		while( --m > 0 && fast != nullptr){
 			fast = fast->next;
 		}
-		if( m !=  0){
+		if( m !=  0 || fast == nullptr){
 			break;
 		}
 		//要把slow -> fast 这一段的数据反转
@@ -106,38 +106,22 @@ ListNode* kReverse(ListNode* p ,int k){
 
 		ListNode* head = t ;//第一个节点
 
-		ListNode* fastnext = fast->next;
 
-		printf("fastnext:%d  slow:%d fast:%d \n", fastnext->val, slow->val, fast->val );
-
-		//outputListNode(dummy.next);
+		ListNode* fastnext = nullptr;
+        if( fast != nullptr){
+            fastnext = fast->next;
+        }
 		while( t != fastnext ){
 			pNext = t->next;
 			t->next = pLast;
 			pLast = t;
 			t = pNext;
 		}
-
-		/*
-		printf("slow:%d fast:%d t:%d pNext:%d pLast:%d head:%d \n", 
-				slow->val,
-				fast->val,
-				t->val,
-				pNext->val,
-				pLast->val,
-				head->val);
-
-		outputListNode(pLast);
-				*/
-
-		//执行到这里 p 就是原来的最后一个节点
-		//head 是现在末尾的结点
 		
 		slow = fastnext;
 		head->next = fastnext;
 		last->next = pLast;
 		last = head;
-		//outputListNode(dummy.next);
 	}
 
 	return dummy.next;
