@@ -140,7 +140,10 @@ int main(int argc, char**argv){
 	vector<int> tmp = makeRandVec(num);
 	ListNode* p = makeList(tmp);
 	outputListNode(p);
-	ListNode* p1 = kReverse(p, k);
-	outputListNode(p1);
+	for( int i = k ; i > 1; i --){
+		ListNode* p = makeList(tmp);
+		ListNode* p1 = kReverse(p, i);
+		outputListNode(p1);
+	}
     return 0;
 }
