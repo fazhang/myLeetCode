@@ -1,58 +1,48 @@
-#include <stdio.h> 
-#include <string>  
-#include <iostream>  
-#include <vector>  
-#include <iomanip>
-#include <memory>
-#include <sys/time.h>
+#include "../base.h"
 using namespace std;
-
-class ListNode {
-		public:
-      int val;
-      ListNode* next;
-      ListNode(int x) { val = x; next = nullptr; }
-      ListNode() {  next = nullptr; }
-};
 
 //两个有序的合并 
 ListNode* listMerge(ListNode* l1, ListNode* l2){
-	if( l1 == nullptr){
+	if( l1 == nullptr ){
 		return l2;
 	}
 	if( l2 == nullptr){
 		return l1;
 	}
 
-	ListNode d(0);
+	ListNode dummy;
+	dummy.next = l1;
+	ListNode* l1last = &dummy ;
+	ListNode* l2last = l2 ;
+	//我们最终要把数据合并到l1上面去
 
-	d.next = l1;// 指向l1
-
-	ListNode* last = &d;
-
-	while (l1 != nullptr && l2 != nullptr){
+	while( l1 != nullptr && l2 != nullptr){
+		ListNode* l1next  = l1->next;
+		ListNode* l2next  = l2->next;
 		if( l1->val <= l2->val){
-			last = l1;
-			l1 = l1->next;
+			l1last = l1;
+			l1 = l1next;
 		}else{
-			// ListNode* l1next = l1->next;
-			ListNode* l2next = l2->next;
-
-			last->next = l2;
+			l1last->next = l2;
 			l2->next = l1;
-			last = l2;
-			// l1->next = l2next;
+			l2last = l2;
+			l1last = l2;
 			l2 = l2next;
 		}
 	}
-	if( l1 == nullptr){
-		last->next = l2;
-	}
-	if( l2 == nullptr){
-		last->next = l1;
-	}
 
-	return d.next;
+	if( l1 == nullptr && l2 == nullptr){
+		return dummy.next;
+	}
+	if( l1 != nullptr){
+		//不用处理啊
+	}
+	if( l2 != nullptr){
+		l1last->next = l2;
+	}
+	return dummy.next;
+
+	//这地方可以用递归？
 }
 ListNode* listMerge2(ListNode* p1, ListNode* p2){
 	if( p1 == nullptr){
@@ -70,13 +60,13 @@ ListNode* listMerge2(ListNode* p1, ListNode* p2){
 	while( p1 != nullptr && p2 != nullptr){
 		if( p1->val <= p2->val ){
 			head->next = p1;
+			head = p1;
 			p1 = p1->next;
-			head = head->next;
 		}
 		else{
 			head->next = p2;
+			head = p2;
 			p2 = p2->next;
-			head = head->next;
 		}
 	}
 	if( p1 != nullptr){
@@ -91,64 +81,7 @@ ListNode* listMerge2(ListNode* p1, ListNode* p2){
 
 
 
-uint64_t  Nowms()
-{
-  timeval tvNow;
-  gettimeofday(&tvNow, NULL);
-  return tvNow.tv_sec* 1000 +  tvNow.tv_usec/1000;
-}
-void outputVec(const vector<int>& in){
-    size_t sep = 10;
-    size_t cnt = 0;
-    for( auto i : in){
-        cout <<setiosflags(ios::left)<<setw(8);
-        cout << i << " ";
-        if( (cnt)%sep == 9){
-            cout << endl;
-        }
-        cnt ++;
-    }
-    cout << endl;
-}
 
-void outputListNode(ListNode* p){
-    if(nullptr == p ){
-        return ;
-    }
-    size_t sep = 10;
-    size_t cnt = 0;
-    while( p != nullptr){
-        cout <<setiosflags(ios::left)<<setw(8);
-        cout << p->val << " ";
-        if( (cnt)%sep == 9){
-            cout << endl;
-        }
-        p = p->next;
-        cnt ++;
-    }
-    cout << endl;
-}
-
-vector<int> makeRandVec( int num, int mod=100){
-    vector<int> out;
-    out.reserve(num);
-    for( int i = 0 ; i < num ; i++){
-		out.push_back(rand()%mod);
-    }
-	return out;
-}
-
-ListNode*  makeList(const vector<int>& in){
-    ListNode pHead ;
-    ListNode* pre = &pHead;
-    for( auto i : in )
-    {
-        ListNode* p = new ListNode(i);
-        pre->next = p ;
-        pre = p ;
-    }
-    return pHead.next;
-}
 
 
 int main(int argc, char**argv){
@@ -174,5 +107,10 @@ int main(int argc, char**argv){
     cout << "p2\n "; outputListNode(p2);
 	ListNode* p3 = listMerge(p1,p2);
 	outputListNode(p3);
+
+    ListNode* p5 = makeList(link1);
+    ListNode* p6 = makeList(link2);
+	ListNode* p4 = listMerge2(p5,p6);
+	outputListNode(p4);
     return 0;
 }

@@ -5,10 +5,23 @@
 #include <vector>  
 #include <iomanip>
 #include <memory>
+#include <deque>
+#include <queue>
+#include <stack>
 #include <math.h>
 #include <sys/time.h>
 
 using namespace std;
+
+
+  struct TreeNode {
+	  int index;
+      int val;
+      TreeNode *left;
+      TreeNode *right;
+	  TreeNode(){}
+      TreeNode(int x,int i) : val(x),index(i), left(NULL), right(NULL) {}
+  };
 
 double mySqrt(double in){
     if( in <= 0.0 ){
@@ -149,6 +162,127 @@ string convertToTitle(int n){
         return res;
 }
 
+
+class Solution_236 {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, int a, int b) {
+        stack<TreeNode*> root2node;
+
+		/*
+        if( p == q ){
+            return p ;
+        }
+		*/
+
+        TreeNode* raw_root = root;
+        bool bFind = checkNode(root,a,b);
+		cout << "bFind " << bFind << endl;
+       if(!bFind){
+           return nullptr;
+       }
+        TreeNode* last = nullptr;
+		cout << "pQueue.size:"<< pQueue.size() << " qQueue:" << qQueue.size() << endl;
+        while(!pQueue.empty() && !qQueue.empty()){
+            TreeNode* p1 = pQueue.front();
+            TreeNode* p2 = qQueue.front();
+			printf("p1:%x p2:%x \n", p1, p2);
+            if( p1 != p2){
+                break;
+            }
+            pQueue.pop();
+            qQueue.pop();
+            last = p1;
+        }
+		cout << "pQueue.size:"<< pQueue.size() << " qQueue:" << qQueue.size() << endl;
+        return last;
+    }
+    bool checkNode(TreeNode*cur, int p , int q){
+        if( cur == nullptr){
+            return false;
+        }
+        tracing.push(cur);
+        if( pQueue.empty() && cur->val == p ){
+                pQueue = tracing;
+				printf("pQueuefront %x \n", pQueue.front());
+        }
+        if( qQueue.empty() && cur->val == q){
+                qQueue = tracing;
+				printf("qQueuefront %x \n", qQueue.front());
+        }
+
+        if(!pQueue.empty() && !qQueue.empty()){
+            return true;
+        }
+        TreeNode* left  = cur->left;
+        TreeNode* right  = cur->right;
+        bool bFind = checkNode(left,q,p);
+        if(bFind){
+            return bFind;
+        }
+        bFind = checkNode(right,q,p);
+        if(bFind){
+            return bFind;
+        }
+        tracing.pop();
+        return false;
+    }
+
+    public:
+    queue<TreeNode*> tracing;
+    queue<TreeNode*> pQueue;
+    queue<TreeNode*> qQueue;
+};
+
+TreeNode* makeTree(vector<int>& in){
+	if( in.empty()){
+		return nullptr;
+	}
+	TreeNode* root = new TreeNode(in[0], 1);
+	deque<TreeNode*> nodeQ;
+	nodeQ.push_back(root);
+	while(!nodeQ.empty()){
+		TreeNode* p = nodeQ.front();
+		nodeQ.pop_front();
+		int left = p->index*2;
+		int right= p->index*2 +1;
+		cout << nodeQ.size() << " " << p->index << " " << left << " " <<  right  << endl;
+		if( left <= in.size() && in[left-1] != -1  ){
+			p->left = new TreeNode(in[left-1], left);
+			nodeQ.push_back(p->left);
+		}
+		if(  right <= in.size() && in[right-1] != -1 ){
+			p->right= new TreeNode(in[right-1], right);
+			nodeQ.push_back(p->right);
+		}
+	}
+	return root;
+}
+
+void outputTreeNode(TreeNode* p){
+	queue<TreeNode*>  nodeQ;
+	nodeQ.push(p);
+	int size = nodeQ.size();
+	while(!nodeQ.empty()){
+		p = nodeQ.front();
+		if( p  != nullptr){
+			TreeNode* left = p->left;
+			TreeNode* right = p->right;
+			nodeQ.push(left);
+			nodeQ.push(right);
+			cout << p->val << " " ;
+		}else{
+			cout << -1  << " " ;
+		}
+		nodeQ.pop();
+		size --;
+		if( size == 0){
+			cout << endl;
+			size = nodeQ.size();
+		}
+
+	}
+}
+
 int main(int argc, char**argv){
     vector<int>  r2Sort;
     srand(Nowms());
@@ -157,9 +291,18 @@ int main(int argc, char**argv){
 		num = atoi(argv[1]);
 	}
 
+	/*
 	for( int i = 1 ; i < num; i++){
 		cout << i << "->  " << convertToTitle(i) << endl;
 	}
+	*/
+	vector<int> tmp = {3,5,1,6,2,0,8,-1,-1,7,4};
+
+	TreeNode* p = makeTree(tmp);
+	outputTreeNode(p);
+	Solution_236 s;
+	TreeNode* ret = s.lowestCommonAncestor(p, 2, 8);
+	cout << ret << endl;
 
     return 0;
 }

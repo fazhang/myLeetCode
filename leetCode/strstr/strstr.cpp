@@ -43,6 +43,8 @@ public:
 };
 
 int main(int argc, char**argv){
+	cout << sizeof(int) << endl;
+	exit(0);
     Solution s;
     string txt;
     string pat;
